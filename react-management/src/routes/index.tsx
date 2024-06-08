@@ -1,19 +1,19 @@
-import { createBrowserRouter } from "react-router-dom";
-import { DashboardPage } from "../pages/dashboard";
-import { HomePage } from "../pages/home";
-import { Layout } from "../pages/layout";
+import { createBrowserRouter } from 'react-router-dom';
+import { DashboardPage } from '../pages/dashboard';
+import { HomePage } from '../pages/home';
+import { Layout } from '../pages/layout';
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Layout />,
     children: [
       {
-        path: "/",
+        path: '/',
         element: <HomePage />,
       },
       {
-        path: "/dashboard",
+        path: '/dashboard',
         element: <DashboardPage />,
       },
     ],
