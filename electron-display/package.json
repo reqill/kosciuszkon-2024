@@ -20,10 +20,11 @@
     "build:linux": "electron-vite build && electron-builder --linux --config"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
     "@heroicons/react": "^2.1.1",
-    "@chakra-ui/react": "^2.8.2",
+    "axios": "^1.7.2",
     "clsx": "^2.1.0",
     "electron-updater": "^6.1.7",
     "framer-motion": "^11.0.3",

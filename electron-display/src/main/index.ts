@@ -1,8 +1,7 @@
-import { app, shell, BrowserWindow, dialog } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
-import { getUrl } from './getUrl';
 import { safeIpcMain } from './safeIpcMain';
 
 // boo Scary
@@ -11,11 +10,13 @@ let mainWindow: BrowserWindow;
 function createWindow(): void {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
-    show: false,
+    width: 400,
+    height: 700,
     autoHideMenuBar: true,
+    // frame: false,
     ...(process.platform === 'linux' ? { icon } : {}),
+    alwaysOnTop: true,
+    resizable: false,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
@@ -27,34 +28,12 @@ function createWindow(): void {
     mainWindow.show();
   });
 
-  // Because all views are dependent on base window we have to close them
   mainWindow.on('close', (e) => {
-    if (BrowserWindow.getAllWindows().length === 1) {
-      return;
-    }
-
-    const choice = dialog.showMessageBoxSync(mainWindow, {
-      type: 'question',
-      buttons: ['Yes', 'No'],
-      title: 'Confirm',
-      message: 'Are you sure you want to quit? You have still some views open.',
-    });
-
-    if (choice === 1) {
-      e.preventDefault();
-      return;
-    }
-
     BrowserWindow.getAllWindows().forEach((window) => {
       if (window.id !== mainWindow.id) {
         window.close();
       }
     });
-  });
-
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url);
-    return { action: 'deny' };
   });
 
   // HMR for renderer base on electron-vite cli.
