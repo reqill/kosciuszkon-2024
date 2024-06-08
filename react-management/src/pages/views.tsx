@@ -1,9 +1,7 @@
-import { Text, VStack } from '@chakra-ui/react';
-
 export const ViewsPage = () => {
   return (
-    <VStack>
-      <Text>Views</Text>
-    </VStack>
+    <div className="flex flex-col space-y-4">
+      <h1 className="text-2xl font-semibold">Views</h1>
+    </div>
   );
 };

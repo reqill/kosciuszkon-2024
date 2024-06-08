@@ -1,7 +1,15 @@
-import { VStack } from '@chakra-ui/react';
 import { Table } from '../components/Table';
 import { useState } from 'react';
-import { DeviceForm, DeviceType } from '../components/DeviceForm';
+// import { DeviceForm, DeviceType } from '../components/DeviceForm';
+
+export type DeviceType = {
+  id: number;
+  name: string;
+  longitude: number;
+  latitude: number;
+  address: string;
+  type: string;
+};
 
 const columns = [
   {
@@ -73,7 +81,7 @@ export const DevicesPage = () => {
   };
 
   return (
-    <VStack width="100%">
+    <div className="flex flex-col space-y-4">
       <Table
         data={dummyData}
         columns={columns}
@@ -81,7 +89,7 @@ export const DevicesPage = () => {
         actions={[{ label: 'Add', onClick: addHandler }]}
         editRow={editHandler}
       />
-      {openForm && <DeviceForm defaultValues={editing} onSubmitSuccess={closeHandler} />}
-    </VStack>
+      {/* {openForm && <DeviceForm defaultValues={editing} onSubmitSuccess={closeHandler} />} */}
+    </div>
   );
 };

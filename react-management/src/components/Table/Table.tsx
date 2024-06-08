@@ -1,16 +1,3 @@
-import {
-  Table as ChakraTable,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer,
-  useColorModeValue,
-  Text,
-  HStack,
-  Button,
-} from '@chakra-ui/react';
 
 interface TableProps<T> {
   columns: { key: keyof T | string; label: string; isNumeric?: boolean }[];
@@ -27,60 +14,66 @@ export const Table = <T extends Record<any, any>>({
   title,
   editRow,
 }: TableProps<T>) => {
-  const bgColor = useColorModeValue('white', 'gray.800');
   const internalColumns = editRow ? [...columns, { key: 'actions', label: 'Actions' }] : columns;
 
   return (
-    <TableContainer bgColor={bgColor} borderRadius="md" shadow="md" padding={1} width="100%">
-      <HStack justifyContent="space-between" px={4}>
-        <Text fontWeight={500} fontSize={18}>
-          {title}
-        </Text>
-        {actions?.map((action, i) => (
-          <Button key={i} onClick={action.onClick} variant="solid" size="sm">
-            {action.label}
-          </Button>
-        ))}
-      </HStack>
-      <ChakraTable variant="simple" size="sm" width="100%">
-        <Thead>
-          <Tr>
+    <div className={`bg-white rounded-md shadow-md p-1 w-full`}>
+      <div className="flex justify-between p-4">
+        <h2 className="font-medium text-lg">{title}</h2>
+        <div className="space-x-2">
+          {actions?.map((action, i) => (
+            <button 
+              key={i} 
+              onClick={action.onClick}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm" // Example Tailwind classes
+            >
+              {action.label}
+            </button>
+          ))}
+        </div>
+      </div>
+      <table className="w-full text-sm">
+        <thead>
+          <tr>
             {internalColumns.map((column, i) => (
-              <Th key={i} isNumeric={column.isNumeric}>
+              <th key={i} className={`text-left ${column.isNumeric ? 'text-right' : ''}`}>
                 {column.label}
-              </Th>
+              </th>
             ))}
-          </Tr>
-        </Thead>
-        <Tbody>
+          </tr>
+        </thead>
+        <tbody>
           {data?.map((item, index) => (
-            <Tr key={index}>
+            <tr key={index}>
               {internalColumns.map((column, i) => (
                 <>
                   {column.key === 'actions' ? (
-                    <Td key={i}>
-                      <Button variant="outline" size="sm" onClick={() => editRow?.(item)}>
+                    <td key={i} className="text-center">
+                      <button 
+                        onClick={() => editRow?.(item)}
+                        className="border border-gray-300 hover:bg-gray-100 py-1 px-2 rounded text-sm" // Example Tailwind classes
+                      >
                         Edit
-                      </Button>
-                    </Td>
+                      </button>
+                    </td>
                   ) : (
-                    <Td key={i} isNumeric={column.isNumeric}>
+                    <td key={i} className={`${column.isNumeric ? 'text-right' : ''}`}>
                       {item[column.key]}
-                    </Td>
+                    </td>
                   )}
                 </>
               ))}
-            </Tr>
+            </tr>
           ))}
-        </Tbody>
-        {data.length === 0 && (
-          <Tr>
-            <Td colSpan={columns.length + (editRow ? 1 : 0)}>
-              <Text textAlign="center">No data</Text>
-            </Td>
-          </Tr>
-        )}
-      </ChakraTable>
-    </TableContainer>
+          {data.length === 0 && (
+            <tr>
+              <td colSpan={internalColumns.length + (editRow ? 1 : 0)} className="text-center py-4">
+                No data
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 };
