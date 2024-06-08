@@ -159,13 +159,17 @@ exports.heartbeat = onRequest(async (req: any, res: any) => {
 });
 
 exports.checkOnline = onRequest(async (req: any, res: any) => {
-  const id = req.body.id;
-
-  // Reference to the Realtime Database
   const db = getDatabase();
+  const querySnapshot = await db.ref("devices").once("value");
 
-  // Update the content for each device ID
-  await db.ref(`devices/${id}/lastHeartbeat`).set(Date.now());
+  const updates: any[] = [];
+  querySnapshot.forEach((doc: any) => {
+    const last = doc.val().lastHeartbeat;
+    const times = (Date.now() - last) / 1000;
+    updates.push(db.ref(`online/${doc.key}/online`).set(times < 120));
+  });
+
+  await Promise.all(updates);
 
   res.json({
     message: "Sucessfull!",
