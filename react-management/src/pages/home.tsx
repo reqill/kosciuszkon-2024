@@ -1,5 +1,5 @@
-import { Button, Text, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { Button, Text, VStack } from '@chakra-ui/react';
+import { useState } from 'react';
 
 export const HomePage = () => {
   const [count, setCount] = useState(0);
