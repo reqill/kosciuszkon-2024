@@ -19,7 +19,7 @@ export const DateTimeBar = () => {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
-    };
+    } as const;
     const dateStr = currentTime.toLocaleDateString("pl-PL", options);
 
     return dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
