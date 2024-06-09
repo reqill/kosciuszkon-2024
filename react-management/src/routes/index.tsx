@@ -1,34 +1,34 @@
-import { createBrowserRouter } from 'react-router-dom';
-import { DashboardPage } from '../pages/dashboard';
-import { HomePage } from '../pages/home';
-import { Layout } from '../pages/layout';
-import { DevicesPage } from '../pages/devices';
-import { ViewsPage } from '../pages/views';
-import { WidgetsPage } from '../pages/widgets';
+import { createBrowserRouter } from "react-router-dom";
+import { DashboardPage } from "../pages/dashboard";
+import { HomePage } from "../pages/home";
+import { Layout } from "../pages/layout";
+import { DevicesPage } from "../pages/devices";
+import { ViewsPage } from "../pages/views";
+import { WidgetsPage } from "../pages/widgets";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Layout />,
     children: [
       {
-        path: '/',
+        path: "/",
         element: <HomePage />,
       },
       {
-        path: '/dashboard',
+        path: "/dashboard",
         element: <DashboardPage />,
         children: [
           {
-            path: '/dashboard/devices',
+            path: "/dashboard/devices",
             element: <DevicesPage />,
           },
           {
-            path: '/dashboard/widgets',
+            path: "/dashboard/widgets",
             element: <WidgetsPage />,
           },
           {
-            path: '/dashboard/views',
+            path: "/dashboard/views",
             element: <ViewsPage />,
           },
         ],
