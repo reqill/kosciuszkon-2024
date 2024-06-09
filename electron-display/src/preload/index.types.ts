@@ -5,6 +5,7 @@ export type Content = {
 
 export type ApiSendMethods = {
   'example-send': (arg: string) => void;
+  'register-id': (id: string) => void;
 };
 
 export type ApiOnMethods = {
