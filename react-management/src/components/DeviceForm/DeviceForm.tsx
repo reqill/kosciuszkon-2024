@@ -8,7 +8,6 @@ import {
   Label,
   Field,
   Fieldset,
-  Legend,
   Select,
 } from "@headlessui/react";
 
