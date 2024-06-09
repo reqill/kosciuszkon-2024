@@ -26,9 +26,9 @@ export const DateTimeBar = () => {
   };
 
   return (
-    <div className="flex gap-1 pl-2.5 text-black bg-blue-400 rounded-xl shadow-md">
-      <div className="grow my-auto text-sm">{getCurrentDate()}</div>
-      <div className="justify-center px-2.5 py-3 text-lg whitespace-nowrap bg-amber-100 rounded-xl">
+    <div className="flex gap-1 pl-2.5 w-[350px] text-black bg-blue-400 rounded-xl shadow-md">
+      <div className="grow my-auto text-2xl">{getCurrentDate()}</div>
+      <div className="justify-center pl-3.5 px-2.5 py-3 text-2xl whitespace-nowrap bg-amber-100 rounded-xl">
         {currentTime.toLocaleTimeString("pl-PL")}
       </div>
     </div>
