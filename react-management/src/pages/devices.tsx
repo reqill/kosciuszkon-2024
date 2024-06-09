@@ -1,6 +1,7 @@
 import { DeviceForm, DeviceType } from "../components/DeviceForm/DeviceForm";
 import { Table } from "../components/Table";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { axios } from "./../axios";
 
 const columns = [
   {
@@ -51,6 +52,12 @@ const dummyData = [
 export const DevicesPage = () => {
   const [editing, setEditing] = useState<DeviceType | undefined>(undefined);
   const [openForm, setOpenForm] = useState(false);
+  const [data, setData] = useState(dummyData);
+  useEffect(() => {
+    axios.get("/allDevices").then((response) => {
+      setData(response.data);
+    });
+  }, []);
 
   const editHandler = (row: DeviceType) => {
     setEditing(row);
@@ -74,23 +81,21 @@ export const DevicesPage = () => {
   const successHandler = () => {
     setEditing(undefined);
     setOpenForm(false);
+    axios.get("/allDevices").then((response) => {
+      setData(response.data);
+    });
   };
 
   return (
     <div className="flex flex-col space-y-4">
       <Table
-        data={dummyData}
+        data={data}
         columns={columns}
         title="Registered devices"
         actions={[{ label: "Add", onClick: addHandler }]}
         editRow={editHandler}
       />
-      <DeviceForm
-        defaultValues={editing}
-        isOpen={openForm}
-        onSubmitSuccess={successHandler}
-        onClose={closeHandler}
-      />
+      {openForm && <DeviceForm defaultValues={editing} isOpen={openForm} onSubmitSuccess={successHandler} onClose={closeHandler} />}
     </div>
   );
 };
