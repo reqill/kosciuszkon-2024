@@ -1,14 +1,8 @@
 import { useFormik } from "formik";
-<<<<<<< Updated upstream
-import { Dialog, Button, DialogTitle, DialogPanel, Input, Label, Field, Fieldset, Legend, Select } from "@headlessui/react";
 
-import { axios } from "./../../axios";
-
-=======
 import { Dialog, Button, DialogTitle, DialogPanel, Input, Label, Field, Fieldset, Select } from "@headlessui/react";
 import { axios } from "./../../axios";
 
->>>>>>> Stashed changes
 export type DeviceType = {
   id: string;
   name: string;
