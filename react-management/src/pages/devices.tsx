@@ -1,59 +1,50 @@
-import { Table } from '../components/Table';
-import { useState } from 'react';
-// import { DeviceForm, DeviceType } from '../components/DeviceForm';
-
-export type DeviceType = {
-  id: number;
-  name: string;
-  longitude: number;
-  latitude: number;
-  address: string;
-  type: string;
-};
+import { DeviceForm, DeviceType } from "../components/DeviceForm/DeviceForm";
+import { Table } from "../components/Table";
+import { useState } from "react";
 
 const columns = [
   {
-    key: 'id',
-    label: 'ID',
+    key: "id",
+    label: "ID",
   },
   {
-    key: 'name',
-    label: 'Name',
+    key: "name",
+    label: "Name",
   },
   {
-    key: 'longitude',
-    label: 'Longitude',
+    key: "longitude",
+    label: "Longitude",
   },
   {
-    key: 'latitude',
-    label: 'Latitude',
+    key: "latitude",
+    label: "Latitude",
   },
   {
-    key: 'address',
-    label: 'Address',
+    key: "address",
+    label: "Address",
   },
   {
-    key: 'type',
-    label: 'Type',
+    key: "type",
+    label: "Type",
   },
 ];
 
 const dummyData = [
   {
     id: 1,
-    name: 'Device 1',
+    name: "Device 1",
     longitude: 12.345,
     latitude: 54.321,
-    address: 'Some address',
-    type: 'Type 1',
+    address: "Some address",
+    type: "Type 1",
   },
   {
     id: 2,
-    name: 'Device 2',
+    name: "Device 2",
     longitude: 12.345,
     latitude: 54.321,
-    address: 'Some address',
-    type: 'Type 2',
+    address: "Some address",
+    type: "Type 2",
   },
 ];
 
@@ -67,7 +58,7 @@ export const DevicesPage = () => {
   };
 
   const deleteHandler = (row: DeviceType) => {
-    console.log('Delete', row);
+    console.log("Delete", row);
   };
 
   const addHandler = () => {
@@ -80,16 +71,26 @@ export const DevicesPage = () => {
     setOpenForm(false);
   };
 
+  const successHandler = () => {
+    setEditing(undefined);
+    setOpenForm(false);
+  };
+
   return (
     <div className="flex flex-col space-y-4">
       <Table
         data={dummyData}
         columns={columns}
         title="Registered devices"
-        actions={[{ label: 'Add', onClick: addHandler }]}
+        actions={[{ label: "Add", onClick: addHandler }]}
         editRow={editHandler}
       />
-      {/* {openForm && <DeviceForm defaultValues={editing} onSubmitSuccess={closeHandler} />} */}
+      <DeviceForm
+        defaultValues={editing}
+        isOpen={openForm}
+        onSubmitSuccess={successHandler}
+        onClose={closeHandler}
+      />
     </div>
   );
 };
