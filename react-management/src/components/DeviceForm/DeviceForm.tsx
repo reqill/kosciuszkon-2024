@@ -1,15 +1,22 @@
 import { useFormik } from "formik";
+<<<<<<< Updated upstream
 import { Dialog, Button, DialogTitle, DialogPanel, Input, Label, Field, Fieldset, Legend, Select } from "@headlessui/react";
 
 import { axios } from "./../../axios";
 
+=======
+import { Dialog, Button, DialogTitle, DialogPanel, Input, Label, Field, Fieldset, Select } from "@headlessui/react";
+import { axios } from "./../../axios";
+
+>>>>>>> Stashed changes
 export type DeviceType = {
-  id: number;
+  id: string;
   name: string;
   longitude: number;
   latitude: number;
   address: string;
   type: string;
+  status?: string;
 };
 
 type Props = {
@@ -33,7 +40,7 @@ const putDevice = async (device: DeviceType) => {
 
 export const DeviceForm = ({ defaultValues, onSubmitSuccess, onClose, isOpen }: Props) => {
   const initialValues: DeviceType = defaultValues || {
-    id: 0,
+    id: "0",
     name: "",
     longitude: 0,
     latitude: 0,
