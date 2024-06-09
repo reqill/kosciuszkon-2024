@@ -8,6 +8,7 @@ export const PhotoWidget = () => {
     "https://firebasestorage.googleapis.com/v0/b/kosciuszkon-949d3.appspot.com/o/1_2.png?alt=media&token=1aaa6be6-fcfa-41cd-9a3f-00ec1fd19bdd",
     "https://firebasestorage.googleapis.com/v0/b/kosciuszkon-949d3.appspot.com/o/2_1.png?alt=media&token=2ac28df2-032d-428d-a2a5-52a8587b3f68",
     "https://firebasestorage.googleapis.com/v0/b/kosciuszkon-949d3.appspot.com/o/2_2.png?alt=media&token=1a547f3e-f477-431c-9417-05ecdd996c50",
+    "https://firebasestorage.googleapis.com/v0/b/kosciuszkon-949d3.appspot.com/o/Uwaga-Dziki--tabliczka.png?alt=media&token=415c162c-227f-4a15-8c9d-7567eb961845",
   ];
   return (
     <div className="w-full p-1 h-full overflow-hidden">
