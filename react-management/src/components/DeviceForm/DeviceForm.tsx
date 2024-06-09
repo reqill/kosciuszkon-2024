@@ -1,7 +1,17 @@
 import { useFormik } from "formik";
-import { Dialog, Button, DialogTitle, DialogPanel, Input, Label, Field, Fieldset, Legend, Select } from "@headlessui/react";
-
+import {
+  Dialog,
+  Button,
+  DialogTitle,
+  DialogPanel,
+  Input,
+  Label,
+  Field,
+  Fieldset,
+  Select,
+} from "@headlessui/react";
 import { axios } from "./../../axios";
+
 
 export type DeviceType = {
   id: number;

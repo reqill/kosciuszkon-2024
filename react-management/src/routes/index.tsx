@@ -5,6 +5,7 @@ import { Layout } from "../pages/layout";
 import { DevicesPage } from "../pages/devices";
 import { ViewsPage } from "../pages/views";
 import { WidgetsPage } from "../pages/widgets";
+import { NameDisplayWidget } from "../components/NameDisplayWidget";
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,15 @@ export const router = createBrowserRouter([
             element: <ViewsPage />,
           },
         ],
+      },
+    ],
+  },
+  {
+    path: "/widgets",
+    children: [
+      {
+        path: "/widgets/name-display",
+        element: <NameDisplayWidget />,
       },
     ],
   },
