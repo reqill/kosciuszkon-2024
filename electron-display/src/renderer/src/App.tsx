@@ -44,8 +44,10 @@ const App = () => {
   }, []);
 
   return (
-    <div className="max-w-screen max-h-screen h-screen w-screen">
-      <IFrame url={contents[currId]?.url} />
+    <div className="h-screen w-screen relative">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <IFrame url={contents[currId]?.url} width="100%" height="100%" />
+      </div>
     </div>
   );
 };
