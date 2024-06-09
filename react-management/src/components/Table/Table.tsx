@@ -1,20 +1,14 @@
-
 interface TableProps<T> {
   columns: { key: keyof T | string; label: string; isNumeric?: boolean }[];
   data: T[];
   actions?: { label: string; onClick: () => void }[];
   title: string;
   editRow?: (row: T) => void;
+  checkboxHandle?: (row: T, val: any) => void;
 }
 
-export const Table = <T extends Record<any, any>>({
-  data,
-  columns,
-  actions,
-  title,
-  editRow,
-}: TableProps<T>) => {
-  const internalColumns = editRow ? [...columns, { key: 'actions', label: 'Actions' }] : columns;
+export const Table = <T extends Record<any, any>>({ data, columns, actions, title, editRow, checkboxHandle }: TableProps<T>) => {
+  const internalColumns = editRow ? [...columns, { key: "actions", label: "Actions" }] : columns;
 
   return (
     <div className={`bg-white rounded-md shadow-md p-1 w-full`}>
@@ -22,8 +16,8 @@ export const Table = <T extends Record<any, any>>({
         <h2 className="font-medium text-lg">{title}</h2>
         <div className="space-x-2">
           {actions?.map((action, i) => (
-            <button 
-              key={i} 
+            <button
+              key={i}
               onClick={action.onClick}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm" // Example Tailwind classes
             >
@@ -36,7 +30,7 @@ export const Table = <T extends Record<any, any>>({
         <thead>
           <tr>
             {internalColumns.map((column, i) => (
-              <th key={i} className={`text-left ${column.isNumeric ? 'text-right' : ''}`}>
+              <th key={i} className={`text-left ${column.isNumeric ? "text-right" : ""}`}>
                 {column.label}
               </th>
             ))}
@@ -47,17 +41,18 @@ export const Table = <T extends Record<any, any>>({
             <tr key={index}>
               {internalColumns.map((column, i) => (
                 <>
-                  {column.key === 'actions' ? (
+                  {column.key === "actions" ? (
                     <td key={i} className="text-center">
-                      <button 
+                      <button
                         onClick={() => editRow?.(item)}
                         className="border border-gray-300 hover:bg-gray-100 py-1 px-2 rounded text-sm" // Example Tailwind classes
                       >
                         Edit
                       </button>
+                      <input type="checkbox" onClick={(e) => checkboxHandle?.(item, e)}></input>
                     </td>
                   ) : (
-                    <td key={i} className={`${column.isNumeric ? 'text-right' : ''}`}>
+                    <td key={i} className={`${column.isNumeric ? "text-right" : ""}`}>
                       {item[column.key]}
                     </td>
                   )}
