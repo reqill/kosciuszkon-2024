@@ -5,6 +5,11 @@ import { Layout } from "../pages/layout";
 import { DevicesPage } from "../pages/devices";
 import { ViewsPage } from "../pages/views";
 import { WidgetsPage } from "../pages/widgets";
+<<<<<<< Updated upstream
+=======
+import { NameDisplayWidget } from "../components/NameDisplayWidget";
+import { PhotoWidget } from "../components/PhotoWidget";
+>>>>>>> Stashed changes
 
 export const router = createBrowserRouter([
   {
@@ -35,4 +40,20 @@ export const router = createBrowserRouter([
       },
     ],
   },
+<<<<<<< Updated upstream
+=======
+  {
+    path: "/widgets",
+    children: [
+      {
+        path: "/widgets/name-display",
+        element: <NameDisplayWidget />,
+      },
+      {
+        path: "/widgets/photo",
+        element: <PhotoWidget />,
+      },
+    ],
+  },
+>>>>>>> Stashed changes
 ]);
