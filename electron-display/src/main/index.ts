@@ -12,7 +12,6 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 const database = getDatabase(firebaseApp);
 
-const id = 'FCYyObjn2NGsW0Bvvmoz';
 // boo Scary
 let mainWindow: BrowserWindow;
 
@@ -24,7 +23,7 @@ function createWindow(): void {
     autoHideMenuBar: true,
     // frame: false,
     ...(process.platform === 'linux' ? { icon } : {}),
-    alwaysOnTop: true,
+    // alwaysOnTop: true,
     resizable: false,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -36,41 +35,7 @@ function createWindow(): void {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show();
-    mainWindow.webContents.openDevTools({ mode: 'detach' });
-    // Create a reference to the specific location in the database
-    setInterval(() => {
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id: id }),
-      };
-      const apiUrl = 'http://192.168.8.17:5001/koszciuszkon2/us-central1/heartbeat';
-
-      // Make a GET request
-      fetch(apiUrl, requestOptions)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    }, 30000);
-
-    const messagesRef = ref(database, `devices/${id}/content`);
-
-    // Listen for changes in the database at the specified location
-    onValue(messagesRef, (snapshot) => {
-      const data = snapshot.val();
-      mainWindow.webContents.send('get-contents', data);
-    });
+    // mainWindow.webContents.openDevTools({ mode: 'detach' });
   });
 
   mainWindow.on('close', (e) => {
@@ -129,4 +94,41 @@ safeIpcMain.on('example-send', (event, arg) => {
   console.log(arg);
   console.log('jestem tu');
   event.sender.send('example-on', 'test');
+});
+
+safeIpcMain.on('register-id', (event, id) => {
+  // Create a reference to the specific location in the database
+  setInterval(() => {
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id }),
+    };
+    const apiUrl = 'http://192.168.8.17:5001/koszciuszkon2/us-central1/heartbeat';
+
+    // Make a GET request
+    fetch(apiUrl, requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }, 30000);
+
+  const messagesRef = ref(database, `devices/${id}/content`);
+
+  // Listen for changes in the database at the specified location
+  onValue(messagesRef, (snapshot) => {
+    const data = snapshot.val();
+    mainWindow.webContents.send('get-contents', data);
+  });
 });
