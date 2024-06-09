@@ -1,9 +1,16 @@
+export type Content = {
+  url: string;
+  time: number;
+};
+
 export type ApiSendMethods = {
   'example-send': (arg: string) => void;
+  'register-id': (id: string) => void;
 };
 
 export type ApiOnMethods = {
   'example-on': (arg: string) => void;
+  'get-contents': (arg: [Content]) => void;
 };
 
 export type ApiRemoveListenerMethods = ApiOnMethods;

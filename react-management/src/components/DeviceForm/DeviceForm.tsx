@@ -1,120 +1,155 @@
-// import {
-//   Box,
-//   Button,
-//   FormControl,
-//   FormErrorMessage,
-//   FormLabel,
-//   Input,
-//   Modal,
-//   ModalBody,
-//   ModalCloseButton,
-//   ModalContent,
-//   ModalFooter,
-//   ModalHeader,
-//   ModalOverlay,
-//   VStack,
-// } from '@chakra-ui/react';
-// import { useFormik } from 'formik';
+import { useFormik } from "formik";
 
-// export type DeviceType = {
-//   id: number;
-//   name: string;
-//   longitude: number;
-//   latitude: number;
-//   address: string;
-//   type: string;
-// };
+import {
+  Dialog,
+  Button,
+  DialogTitle,
+  DialogPanel,
+  Input,
+  Label,
+  Field,
+  Fieldset,
+  Select,
+} from "@headlessui/react";
 
-// type Props = {
-//   defaultValues?: DeviceType;
-//   onSubmitSuccess: () => void;
-// };
+import { axios } from "./../../axios";
 
-// const postDevice = async (device: Omit<DeviceType, 'id'>) => {};
 
-// const putDevice = async (device: DeviceType) => {};
+export type DeviceType = {
+  id: string;
+  name: string;
+  longitude: number;
+  latitude: number;
+  address: string;
+  type: string;
+  status?: string;
+};
 
-// export const DeviceForm = ({ defaultValues, onSubmitSuccess }: Props) => {
-//   const initialValues: DeviceType = defaultValues || {
-//     id: 0,
-//     name: '',
-//     longitude: 0,
-//     latitude: 0,
-//     address: '',
-//     type: '',
-//   };
+type Props = {
+  defaultValues?: DeviceType;
+  onSubmitSuccess: () => void;
+  onClose: () => void;
+  isOpen: boolean;
+};
 
-//   const formik = useFormik({
-//     initialValues,
-//     onSubmit: async (values, { setSubmitting, resetForm }) => {
-//       try {
-//         if (defaultValues) {
-//           await putDevice({ ...values, id: defaultValues.id });
-//         } else {
-//           await postDevice(values);
-//         }
-//         onSubmitSuccess();
-//         resetForm();
-//       } catch (error) {
-//         console.error(error);
-//       } finally {
-//         setSubmitting(false);
-//       }
-//     },
-//   });
+const postDevice = async (device: Omit<DeviceType, "id">) => {
+  return axios.post("/createDevice", {
+    ...device,
+  });
+};
 
-//   return (
-//     <Modal isOpen={true} onClose={onSubmitSuccess}>
-//       <ModalOverlay />
-//       <ModalContent>
-//         <ModalHeader>{defaultValues ? 'Edit Device' : 'Create Device'}</ModalHeader>
-//         <ModalCloseButton />
-//         <ModalBody>
-//           <Box p={4}>
-//             <form onSubmit={formik.handleSubmit}>
-//               <VStack spacing={4} align="stretch">
-//                 <FormControl isInvalid={!!(formik.errors.name && formik.touched.name)}>
-//                   <FormLabel>Name</FormLabel>
-//                   <Input {...formik.getFieldProps('name')} />
-//                   <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
-//                 </FormControl>
+const putDevice = async (device: DeviceType) => {
+  return axios.put("/updateDevice", {
+    ...device,
+  });
+};
 
-//                 <FormControl isInvalid={!!(formik.errors.longitude && formik.touched.longitude)}>
-//                   <FormLabel>Longitude</FormLabel>
-//                   <Input {...formik.getFieldProps('longitude')} />
-//                   <FormErrorMessage>{formik.errors.longitude}</FormErrorMessage>
-//                 </FormControl>
+export const DeviceForm = ({ defaultValues, onSubmitSuccess, onClose, isOpen }: Props) => {
+  const initialValues: DeviceType = defaultValues || {
+    id: "0",
+    name: "",
+    longitude: 0,
+    latitude: 0,
+    address: "",
+    type: "",
+  };
 
-//                 <FormControl isInvalid={!!(formik.errors.latitude && formik.touched.latitude)}>
-//                   <FormLabel>Latitude</FormLabel>
-//                   <Input {...formik.getFieldProps('latitude')} />
-//                   <FormErrorMessage>{formik.errors.latitude}</FormErrorMessage>
-//                 </FormControl>
+  const formik = useFormik({
+    initialValues,
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      try {
+        if (defaultValues) {
+          await putDevice({ ...values, id: defaultValues.id });
+        } else {
+          await postDevice(values);
+        }
+        onSubmitSuccess();
+        resetForm();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setSubmitting(false);
+      }
+    },
+  });
 
-//                 <FormControl isInvalid={!!(formik.errors.address && formik.touched.address)}>
-//                   <FormLabel>Address</FormLabel>
-//                   <Input {...formik.getFieldProps('address')} />
-//                   <FormErrorMessage>{formik.errors.address}</FormErrorMessage>
-//                 </FormControl>
+  return (
+    <Dialog open={isOpen} onClose={onClose} className="relative z-50">
+      <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-black/20">
+        <DialogPanel className="max-w-lg space-y-4 border bg-white px-4 py-5">
+          <DialogTitle className="text-lg font-semibold text-gray-800">Add new device</DialogTitle>
 
-//                 <FormControl isInvalid={!!(formik.errors.type && formik.touched.type)}>
-//                   <FormLabel>Type</FormLabel>
-//                   <Input {...formik.getFieldProps('type')} />
-//                   <FormErrorMessage>{formik.errors.type}</FormErrorMessage>
-//                 </FormControl>
-//               </VStack>
-//             </form>
-//           </Box>
-//         </ModalBody>
-//         <ModalFooter>
-//           <Button variant="ghost" mr={3} onClick={onSubmitSuccess}>
-//             Cancel
-//           </Button>
-//           <Button type="submit" colorScheme="blue" onClick={() => formik.handleSubmit()}>
-//             Save
-//           </Button>
-//         </ModalFooter>
-//       </ModalContent>
-//     </Modal>
-//   );
-// };
+          <Fieldset className="space-y-2 w-96">
+            <Field className="w-full flex flex-col">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                className="w-full bg-gray-100 border-gray-300 rounded-sm py-1 px-2"
+                name="name"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+              />
+            </Field>
+
+            <Field className="w-full flex flex-col">
+              <Label htmlFor="longitude">Longitude</Label>
+              <Input
+                id="longitude"
+                className="w-full bg-gray-100 border-gray-300 rounded-sm py-1 px-2"
+                name="longitude"
+                value={formik.values.longitude}
+                onChange={formik.handleChange}
+              />
+            </Field>
+
+            <Field className="w-full flex flex-col">
+              <Label htmlFor="latitude">Latitude</Label>
+              <Input
+                id="latitude"
+                className="w-full bg-gray-100 border-gray-300 rounded-sm py-1 px-2"
+                name="latitude"
+                value={formik.values.latitude}
+                onChange={formik.handleChange}
+              />
+            </Field>
+
+            <Field className="w-full flex flex-col">
+              <Label htmlFor="address">Address</Label>
+              <Input
+                id="address"
+                className="w-full bg-gray-100 border-gray-300 rounded-sm py-1 px-2"
+                name="address"
+                value={formik.values.address}
+                onChange={formik.handleChange}
+              />
+            </Field>
+
+            <Field className="w-full flex flex-col">
+              <Label htmlFor="type">Type</Label>
+              <Select
+                id="type"
+                className="w-full bg-gray-100 border-gray-300 rounded-sm py-1 px-2"
+                name="type"
+                value={formik.values.type}
+                onChange={formik.handleChange}
+              >
+                <option value="transport">Transport</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="info">Information</option>
+              </Select>
+            </Field>
+          </Fieldset>
+
+          <div className="flex flex-row justify-end">
+            <Button className="ring-inset ring-1 ring-blue-500 text-blue-500 px-2 py-1 rounded ml-auto mr-2" onClick={onClose}>
+              Close
+            </Button>
+            <Button className="bg-blue-500 text-white px-3 py-1 rounded" onClick={() => formik.submitForm()}>
+              Save
+            </Button>
+          </div>
+        </DialogPanel>
+      </div>
+    </Dialog>
+  );
+};

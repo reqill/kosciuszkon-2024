@@ -4,6 +4,14 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 import { safeIpcMain } from './safeIpcMain';
 
+import firebaseConfig from './firebaseConfig';
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, onValue, get } from 'firebase/database';
+
+const firebaseApp = initializeApp(firebaseConfig);
+
+const database = getDatabase(firebaseApp);
+
 // boo Scary
 let mainWindow: BrowserWindow;
 
@@ -15,17 +23,19 @@ function createWindow(): void {
     autoHideMenuBar: true,
     // frame: false,
     ...(process.platform === 'linux' ? { icon } : {}),
-    alwaysOnTop: true,
+    // alwaysOnTop: true,
     resizable: false,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       contextIsolation: true,
+      nodeIntegration: true,
     },
   });
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show();
+    // mainWindow.webContents.openDevTools({ mode: 'detach' });
   });
 
   mainWindow.on('close', (e) => {
@@ -82,5 +92,43 @@ app.on('window-all-closed', async () => {
 
 safeIpcMain.on('example-send', (event, arg) => {
   console.log(arg);
-  mainWindow.webContents.send('example-on', arg);
+  console.log('jestem tu');
+  event.sender.send('example-on', 'test');
+});
+
+safeIpcMain.on('register-id', (event, id) => {
+  // Create a reference to the specific location in the database
+  setInterval(() => {
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id }),
+    };
+    const apiUrl = 'http://192.168.8.17:5001/koszciuszkon2/us-central1/heartbeat';
+
+    // Make a GET request
+    fetch(apiUrl, requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }, 30000);
+
+  const messagesRef = ref(database, `devices/${id}/content`);
+
+  // Listen for changes in the database at the specified location
+  onValue(messagesRef, (snapshot) => {
+    const data = snapshot.val();
+    mainWindow.webContents.send('get-contents', data);
+  });
 });
