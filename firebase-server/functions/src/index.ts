@@ -22,10 +22,8 @@ exports.createDevice = onRequest(async (req: any, res: any) => {
   const writeResult = await getFirestore().collection("devices").add({
     name,
     address,
-    location: {
-      latitude,
-      longitude,
-    },
+    latitude,
+    longitude,
     type,
   });
 
@@ -50,22 +48,16 @@ exports.devicesNear = onRequest(async (req: any, res: any) => {
   const kmPerLongitude = 71.69;
   //const maxDiff = radius / kmPerLongitude;
   const db = getFirestore();
-  const querySnapshot = await db
-    .collection("devices")
-    // .where("location.latitude", ">=", latitude - maxDiff)
-    // .where("location.latitude", "<=", latitude + maxDiff)
-    // .where("location.longitude", ">=", longitude - maxDiff)
-    // .where("location.longitude", "<=", longitude + maxDiff)
-    .get();
+  const querySnapshot = await db.collection("devices").get();
   const results: String[] = [];
 
   querySnapshot.forEach((doc: any) => {
     const data = doc.data();
-    const location = data.location;
-    const dif_long = (location.longitude - longitude) * kmPerLongitude;
-    const dif_lat = (location.latitude - latitude) * kmPerLatitiude;
 
-    if (dif_long * dif_long + dif_lat * dif_lat < radius * radius) {
+    const dif_long = (data.longitude - longitude) * kmPerLongitude;
+    const dif_lat = (data.latitude - latitude) * kmPerLatitiude;
+    const dist = dif_long * dif_long + dif_lat * dif_lat;
+    if (dist < radius * radius) {
       results.push(doc.id);
     }
   });
@@ -73,6 +65,21 @@ exports.devicesNear = onRequest(async (req: any, res: any) => {
     message: "Sucessfull!",
     ids: results,
   });
+});
+
+exports.allDevices = onRequest(async (req: any, res: any) => {
+  const db = getFirestore();
+  const querySnapshot = await db.collection("devices").get();
+  const devices: any[] = [];
+
+  querySnapshot.forEach((doc: any) => {
+    devices.push({
+      id: doc.id,
+      ...doc.data(),
+    });
+  });
+
+  res.json(devices);
 });
 
 exports.updateDevice = onRequest(async (req: any, res: any) => {
@@ -105,10 +112,10 @@ exports.updateDevice = onRequest(async (req: any, res: any) => {
     ...existingData,
     name: req.body.name || existingData?.name,
     address: req.body.address || existingData?.address,
-    location: {
-      latitude: req.body.latitude ?? existingData?.location?.latitude,
-      longitude: req.body.longitude ?? existingData?.location?.longitude,
-    },
+
+    latitude: req.body.latitude ?? existingData?.latitude,
+    longitude: req.body.longitude ?? existingData?.longitude,
+
     type: req.body.type || existingData?.type,
   };
 

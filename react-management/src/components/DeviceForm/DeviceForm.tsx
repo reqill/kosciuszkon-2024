@@ -1,16 +1,7 @@
 import { useFormik } from "formik";
-import {
-  Dialog,
-  Button,
-  DialogTitle,
-  DialogPanel,
-  Input,
-  Label,
-  Field,
-  Fieldset,
-  Legend,
-  Select,
-} from "@headlessui/react";
+import { Dialog, Button, DialogTitle, DialogPanel, Input, Label, Field, Fieldset, Legend, Select } from "@headlessui/react";
+
+import { axios } from "./../../axios";
 
 export type DeviceType = {
   id: number;
@@ -29,19 +20,18 @@ type Props = {
 };
 
 const postDevice = async (device: Omit<DeviceType, "id">) => {
-  console.log("POST", device);
+  return axios.post("/createDevice", {
+    ...device,
+  });
 };
 
 const putDevice = async (device: DeviceType) => {
-  console.log("PUT", device);
+  return axios.put("/updateDevice", {
+    ...device,
+  });
 };
 
-export const DeviceForm = ({
-  defaultValues,
-  onSubmitSuccess,
-  onClose,
-  isOpen,
-}: Props) => {
+export const DeviceForm = ({ defaultValues, onSubmitSuccess, onClose, isOpen }: Props) => {
   const initialValues: DeviceType = defaultValues || {
     id: 0,
     name: "",
@@ -74,9 +64,7 @@ export const DeviceForm = ({
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-black/20">
         <DialogPanel className="max-w-lg space-y-4 border bg-white px-4 py-5">
-          <DialogTitle className="text-lg font-semibold text-gray-800">
-            Add new device
-          </DialogTitle>
+          <DialogTitle className="text-lg font-semibold text-gray-800">Add new device</DialogTitle>
 
           <Fieldset className="space-y-2 w-96">
             <Field className="w-full flex flex-col">
@@ -140,16 +128,10 @@ export const DeviceForm = ({
           </Fieldset>
 
           <div className="flex flex-row justify-end">
-            <Button
-              className="ring-inset ring-1 ring-blue-500 text-blue-500 px-2 py-1 rounded ml-auto mr-2"
-              onClick={onClose}
-            >
+            <Button className="ring-inset ring-1 ring-blue-500 text-blue-500 px-2 py-1 rounded ml-auto mr-2" onClick={onClose}>
               Close
             </Button>
-            <Button
-              className="bg-blue-500 text-white px-3 py-1 rounded"
-              onClick={() => formik.submitForm()}
-            >
+            <Button className="bg-blue-500 text-white px-3 py-1 rounded" onClick={() => formik.submitForm()}>
               Save
             </Button>
           </div>

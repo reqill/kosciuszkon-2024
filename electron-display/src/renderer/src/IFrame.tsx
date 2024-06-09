@@ -11,7 +11,7 @@ const IFrame: React.FC<IFrameData> = ({ url, width = '400px', height = '400px' }
   if (!url) {
     return null;
   }
-  return <img src={url} width={width} height={height} style={{ objectFit: 'contian' }} />;
+  return <iframe src={url} width={width} height={height} style={{ objectFit: 'contain' }} />;
 };
 
 export default IFrame;
