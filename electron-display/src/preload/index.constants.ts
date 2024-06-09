@@ -2,7 +2,7 @@ import type { ApiOnMethods, ApiRemoveListenerMethods, ApiSendMethods } from './i
 
 export const API_SEND_VALID_CHANNELS: Array<keyof ApiSendMethods> = ['example-send'];
 
-export const API_ON_VALID_CHANNELS: Array<keyof ApiOnMethods> = ['example-on'];
+export const API_ON_VALID_CHANNELS: Array<keyof ApiOnMethods> = ['example-on', 'get-contents'];
 
 export const API_REMOVE_LISTENER_VALID_CHANNELS: Array<keyof ApiRemoveListenerMethods> = [
   ...API_ON_VALID_CHANNELS,
