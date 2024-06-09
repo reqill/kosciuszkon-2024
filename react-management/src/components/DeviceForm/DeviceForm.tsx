@@ -1,4 +1,5 @@
 import { useFormik } from "formik";
+
 import {
   Dialog,
   Button,
@@ -10,16 +11,18 @@ import {
   Fieldset,
   Select,
 } from "@headlessui/react";
+
 import { axios } from "./../../axios";
 
 
 export type DeviceType = {
-  id: number;
+  id: string;
   name: string;
   longitude: number;
   latitude: number;
   address: string;
   type: string;
+  status?: string;
 };
 
 type Props = {
@@ -43,7 +46,7 @@ const putDevice = async (device: DeviceType) => {
 
 export const DeviceForm = ({ defaultValues, onSubmitSuccess, onClose, isOpen }: Props) => {
   const initialValues: DeviceType = defaultValues || {
-    id: 0,
+    id: "0",
     name: "",
     longitude: 0,
     latitude: 0,
